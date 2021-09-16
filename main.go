@@ -2,7 +2,8 @@ package main
 
 import "fmt"
 
+var idPlayer = RandomString(4)
+
 func main() {
-	DisplayOwnBoard(Board)
 	fmt.Println()
 }

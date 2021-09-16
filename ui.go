@@ -10,7 +10,7 @@ import (
 //////////////////////////////////////////////////
 ////////// 			GENERIC 			//////////
 //////////////////////////////////////////////////
-
+const BOARD_SIZE = 5
 const COMMAND_NO string = "n"
 const COMMAND_YES string = "y"
 const COMMAND_QUIT string = "q"
@@ -31,17 +31,11 @@ func askPlayer(question string) string {
 	return input
 }
 
-func displayToUser(str string) {
-	fmt.Println(str)
-}
-
-func generateEmptyBoard() [][]int8 {
-	var board [][]int8
-	for i := 0; i < 10; i++ {
-		for y := 0; y < 10; y++ {
-			board[i][y] = 0
-			// utiliser make !
-		}
+// Create an array of int8 array that will be fill
+func generateEmptyBoard() [BOARD_SIZE][]int8 {
+	var board [BOARD_SIZE][]int8
+	for i := 0; i < BOARD_SIZE; i++ {
+			board[i] = make([]int8, BOARD_SIZE)
 	}
 	return board
 }
@@ -57,16 +51,35 @@ var Board []Ship = []Ship{
 		[]ShipPosition{{1, 1}},
 		[]ShipPosition{{}}}}
 
-func DisplayOwnBoard(board []Ship) {
-	emptyBoard := generateEmptyBoard()
-	for i := 0; i < len(board); i++ {
-		for y := 0; y < len(board[i].Positions); y++ {
-			emptyBoard[board[i].Positions[y].x][board[i].Positions[y].y] = 1
+func GenerateAndShowABoard(board []Ship) {
+	showABoard(fillABoard(board))
+}
+
+func fillABoard(board []Ship) [BOARD_SIZE][]int8 {
+	generatedBoard := generateEmptyBoard()
+	for _, ship := range board {
+		for _, shipPosition := range ship.Positions {
+			generatedBoard[shipPosition.x][shipPosition.y] = 1
 		}
-		fmt.Println(emptyBoard[i])
+	}
+	return generatedBoard
+}
+func showABoard(board [BOARD_SIZE][]int8) {
+	for _, line := range board {
+		fmt.Println(line)
 	}
 }
 
-func displayOpponentBoard() {}
+/*
 
-func displayOwnBoardState() {}
+// Display the board of the player
+func DisplayOwnBoard(board []Ship) {
+}
+// Display opponent board
+func DisplayOpponentBoard() {}
+
+// Display own state board
+func DisplayOwnBoardState() {}
+
+
+ */
