@@ -9,7 +9,7 @@ type ShipPosition struct {
 // A ship
 type Ship struct {
 	// Positions for this ship
-	Positions []ShipPosition
+	positions []ShipPosition
 	// Positions where the ship is touched
-	TouchedAt []ShipPosition
+	touchedAt []ShipPosition
 }
