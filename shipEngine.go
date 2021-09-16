@@ -13,3 +13,15 @@ type Ship struct {
 	// Positions where the ship is touched
 	touchedAt []ShipPosition
 }
+
+// Checks if a shot has a hit
+func hasCollission(boats []Ship, x int8, y int8) bool {
+	for i := 0; i < len(boats); i++ {
+		for j := 0; j < len(boats[i].positions); j++ {
+			if x == boats[i].positions[j].x && y == boats[i].positions[j].y {
+				return true
+			}
+		}
+	}
+	return false
+}
