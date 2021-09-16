@@ -1,6 +1,9 @@
 package main
 
-import "math/rand"
+import (
+	"fmt"
+	"math/rand"
+)
 
 // Position of a ship
 type ShipPosition struct {
@@ -42,9 +45,10 @@ func createGame() {
 
 func generateShip(ships []Ship, shipSize int8) Ship {
 	var ship Ship
+	searchPosition := false
 	positions := make([]ShipPosition, 0, 5)
 	const HORIZONTAL = 0
-	const VERTICAL = 0
+	const VERTICAL = 1
 	orientation := int(rand.Intn(1))
 	var position ShipPosition
 	if orientation == HORIZONTAL {
@@ -55,8 +59,16 @@ func generateShip(ships []Ship, shipSize int8) Ship {
 		positions = append(positions, position)
 		for i := 0; i < int(shipSize); i++ {
 			position.x = x + int8(i)
+			if position.x >= 11 {
+				fmt.Printf("The ship exceeds the board")
+				position.x = x
+			}
 			position.y = y
 			positions = append(positions, position)
+			if hasCollission(ships, position.x, position.y) {
+				searchPosition = true
+				break
+			}
 		}
 	} else if orientation == VERTICAL {
 		x := int8(rand.Intn(9))
@@ -67,23 +79,27 @@ func generateShip(ships []Ship, shipSize int8) Ship {
 		for i := 0; i < int(shipSize); i++ {
 			position.x = x
 			position.y = y + int8(i)
+			if position.y >= 11 {
+				fmt.Printf("The ship exceeds the board")
+				position.y = y
+			}
 			positions = append(positions, position)
 		}
 	}
 
-	for i := 0; i < int(shipSize); i++ {
-		var position ShipPosition
-		searchPosition := true
-		for searchPosition {
-			// Generate coord
-
-			// Verify collission
-			if !hasCollission(ships, position.x, position.y) {
-				searchPosition = false
-			}
-		}
-		positions = append(positions, position)
-	}
+	//for i := 0; i < int(shipSize); i++ {
+	//	var position ShipPosition
+	//	searchPosition := true
+	//	for searchPosition {
+	//		// Generate coord
+	//
+	//		// Verify collission
+	//		if !hasCollission(ships, position.x, position.y) {
+	//			searchPosition = false
+	//		}
+	//	}
+	//	positions = append(positions, position)
+	//}
 
 	ship.positions = positions
 	return ship
