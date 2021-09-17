@@ -8,11 +8,11 @@ import (
 )
 
 var WELCOME_PLAYER = Choice{
-		"Bienvenue au jeu de bataille navale !\n",
-		[]string{}}
+	"Bienvenue au jeu de bataille navale !\n",
+	[]string{}}
 
 var GIVE_PLAYER_ID = Choice{
-		"Votre ID est %s\n",
+	"Votre ID est %s\n",
 	[]string{}}
 
 var ENTER_ID_OPPONENT = Choice{
@@ -56,7 +56,6 @@ var WHICH_OPPONENT = Choice{
 	"Choisissez votre cible: ",
 	[]string{}}
 
-
 var OPPONENT_ACTION_MENU = Choice{
 	"Voici les actions possibles: ",
 	[]string{
@@ -66,7 +65,6 @@ var OPPONENT_ACTION_MENU = Choice{
 var WHICH_OPPONENT_CASE = Choice{
 	"Quel case voulez-vous attaquer ? Format attendu: 1:1",
 	[]string{}}
-
 
 var ATTACK_LAUNCHED = Choice{
 	"Vous avez lancé une attaque sur %s\n",
@@ -80,15 +78,15 @@ var ATTACK_FAILED = Choice{
 	"Vous n'avez touché aucun des navires de %s\n",
 	[]string{}}
 
-var ATTACKED_SUCCESSED= Choice{
+var ATTACKED_SUCCESSED = Choice{
 	"Un de vos navires a été touché par un tir de %s\n",
 	[]string{}}
 
-var ATTACKED_FAILED= Choice{
+var ATTACKED_FAILED = Choice{
 	"Vous avez essuyé un tir de %s sans dégats %s\n",
 	[]string{}}
 
-var ATTACKED_SINKED= Choice{
+var ATTACKED_SINKED = Choice{
 	"Vous n'avez touché aucun des navires de %s, un de vos navires a coulé\n",
 	[]string{}}
 
@@ -96,17 +94,16 @@ var YOU_LOST = Choice{
 	"Tout vos navires ont été coulés, vous avez perdu.\n",
 	[]string{}}
 
-
 var OPPONENT_LOST = Choice{
 	"%s n'a plus aucun navire, il a perdu.\n",
 	[]string{}}
 
-var YOU_WIN  = Choice{
+var YOU_WIN = Choice{
 	"Vous êtes le dernier en lice ! Vous avez gagné !\n",
 	[]string{}}
 
 type Choice struct {
-	Text string
+	Text    string
 	Choices []string
 }
 
@@ -117,7 +114,7 @@ func WelcomePlayer(text Choice, idPlayer int8) {
 	// Ask for an opponent id
 	reAskIdOpponent := true
 	firstAsk := true
-	for reAskIdOpponent  {
+	for reAskIdOpponent {
 		if firstAsk {
 			idsOpponent = append(idsOpponent, askPlayer(ENTER_ID_OPPONENT.Text))
 			firstAsk = false
@@ -149,9 +146,9 @@ func ActionMenu() {
 	ActionMenu()
 }
 
-func OpponentActionMenu(){
+func OpponentActionMenu() {
 	fmt.Println(COMBAT_MENU.Text)
-	idOpponent := askPlayer(WHICH_OPPONENT.getTextWithChoices())
+	// idOpponent := askPlayer(WHICH_OPPONENT.getTextWithChoices())
 	fmt.Println(OPPONENT_ACTION_MENU.getTextWithChoices())
 	choicePlayer := askPlayer(ENTER_CHOICE.Text)
 	switch choicePlayer {
@@ -166,7 +163,7 @@ func OpponentActionMenu(){
 }
 
 // rajoute un joueur
-func (choiceObj Choice) getTextWithChoices() string{
+func (choiceObj Choice) getTextWithChoices() string {
 	choices := ""
 	for _, choice := range choiceObj.Choices {
 		choices += choice
@@ -185,8 +182,6 @@ func askPlayer(question string) string {
 	input = strings.TrimSuffix(input, "\n")
 	return input
 }
-
-
 
 /*
 Scénario :
