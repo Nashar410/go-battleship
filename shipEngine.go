@@ -1,7 +1,8 @@
 package main
 
+// This file contain all the meta to interract with or between ships
+
 import (
-	"fmt"
 	"math/rand"
 )
 
@@ -19,11 +20,11 @@ type Ship struct {
 	touchedAt []ShipPosition
 }
 
-// Checks if a shot has a hit
-func hasCollission(boats []Ship, x int8, y int8) bool {
+// Checks if a position has a hit with existing boats
+func hasCollission(boats []Ship, position ShipPosition) bool {
 	for i := 0; i < len(boats); i++ {
 		for j := 0; j < len(boats[i].positions); j++ {
-			if x == boats[i].positions[j].x && y == boats[i].positions[j].y {
+			if position.x == boats[i].positions[j].x && position.y == boats[i].positions[j].y {
 				return true
 			}
 		}
@@ -31,76 +32,61 @@ func hasCollission(boats []Ship, x int8, y int8) bool {
 	return false
 }
 
-// Min x 0
-// Min y 0
-// Max x 9
-// Max y 9
-
-func createGame() {
-	// ships := make([]Ship, 0, 5)
-
-	// ship = generateShip(ships, 2)
-	// ship = generateShip(ships, 3)
-}
-
+// Generate a ship with the following pattern :
+// Set the first position, then set a random orientation to generate remaining chained positions
 func generateShip(ships []Ship, shipSize int8) Ship {
-	var ship Ship
-	searchPosition := false
+	var newShip Ship
+	mustGenerate := true
 	positions := make([]ShipPosition, 0, 5)
+	var position ShipPosition
 	const HORIZONTAL = 0
 	const VERTICAL = 1
-	orientation := int(rand.Intn(1))
-	var position ShipPosition
-	if orientation == HORIZONTAL {
+
+restartGeneration:
+	// Is true when must generate/regenerate the entier ship
+	for mustGenerate {
+
+		// At the beginning, set the position slice empty
+		positions = nil
+
+		// Generate first position with x and y locations
 		x := int8(rand.Intn(9 - int(shipSize)))
 		y := int8(rand.Intn(9))
-		position.x = x
-		position.y = y
-		positions = append(positions, position)
-		for i := 0; i < int(shipSize); i++ {
-			position.x = x + int8(i)
-			if position.x >= 11 {
-				fmt.Printf("The ship exceeds the board")
-				position.x = x
-			}
-			position.y = y
-			positions = append(positions, position)
-			if hasCollission(ships, position.x, position.y) {
-				searchPosition = true
-				break
-			}
+
+		// Regenerate the entire ship if has collision with other ships
+		if hasCollission(ships, position) {
+			break restartGeneration
 		}
-	} else if orientation == VERTICAL {
-		x := int8(rand.Intn(9))
-		y := int8(rand.Intn(9 - int(shipSize)))
+
+		// Append first position
 		position.x = x
 		position.y = y
 		positions = append(positions, position)
-		for i := 0; i < int(shipSize); i++ {
-			position.x = x
-			position.y = y + int8(i)
-			if position.y >= 11 {
-				fmt.Printf("The ship exceeds the board")
+
+		// Set a random orientation for the other parts of the ship
+		orientation := int(rand.Intn(1))
+
+		// Generate n remaining parts of the ship from the second index
+		for i := 1; i < int(shipSize); i++ {
+			if orientation == HORIZONTAL {
+				position.x = x + int8(i)
 				position.y = y
+				positions = append(positions, position)
+
+			} else if orientation == VERTICAL {
+				position.x = x
+				position.y = y + int8(i)
+				positions = append(positions, position)
 			}
-			positions = append(positions, position)
+
+			// Regenerate the entire ship if the position has a collision with existing position
+			if hasCollission(ships, position) {
+				break restartGeneration
+			}
 		}
 	}
 
-	//for i := 0; i < int(shipSize); i++ {
-	//	var position ShipPosition
-	//	searchPosition := true
-	//	for searchPosition {
-	//		// Generate coord
-	//
-	//		// Verify collission
-	//		if !hasCollission(ships, position.x, position.y) {
-	//			searchPosition = false
-	//		}
-	//	}
-	//	positions = append(positions, position)
-	//}
-
-	ship.positions = positions
-	return ship
+	// The positions are successfully generated
+	newShip.positions = positions
+	return newShip
 }

@@ -60,8 +60,8 @@ var Board []Ship = []Ship{
 func DisplayOwnBoard(board []Ship) {
 	emptyBoard := generateEmptyBoard()
 	for i := 0; i < len(board); i++ {
-		for y := 0; y < len(board[i].Positions); y++ {
-			emptyBoard[board[i].Positions[y].x][board[i].Positions[y].y] = 1
+		for y := 0; y < len(board[i].positions); y++ {
+			emptyBoard[board[i].positions[y].x][board[i].positions[y].y] = 1
 		}
 		fmt.Println(emptyBoard[i])
 	}
