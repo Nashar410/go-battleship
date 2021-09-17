@@ -7,7 +7,7 @@ import (
 //////////////////////////////////////////////////
 ////////// 			GENERIC 			//////////
 //////////////////////////////////////////////////
-const BOARD_SIZE = 5
+const BOARD_SIZE = 10
 const COMMAND_NO = "n"
 const COMMAND_YES = "y"
 const COMMAND_QUIT = "q"
@@ -20,26 +20,14 @@ const SHIP_TOUCHED = 1
 const SHIP_SINKED = 2
 const CASE_EMPTY = 0
 
-
 // Create an array of int8 array that will be fill
 func generateEmptyBoard() [BOARD_SIZE][]int8 {
 	var board [BOARD_SIZE][]int8
 	for i := 0; i < BOARD_SIZE; i++ {
-			board[i] = make([]int8, BOARD_SIZE)
+		board[i] = make([]int8, BOARD_SIZE)
 	}
 	return board
 }
-
-var Board []Ship = []Ship{
-	{
-		[]ShipPosition{{0, 0}},
-		[]ShipPosition{{}}},
-	{
-		[]ShipPosition{{0, 2}},
-		[]ShipPosition{{}}},
-	{
-		[]ShipPosition{{1, 1}},
-		[]ShipPosition{{}}}}
 
 func GenerateAndShowABoard(board []Ship) {
 	showABoard(fillABoard(board))
@@ -48,7 +36,7 @@ func GenerateAndShowABoard(board []Ship) {
 func fillABoard(board []Ship) [BOARD_SIZE][]int8 {
 	generatedBoard := generateEmptyBoard()
 	for _, ship := range board {
-		for _, shipPosition := range ship.Positions {
+		for _, shipPosition := range ship.positions {
 			generatedBoard[shipPosition.x][shipPosition.y] = 1
 		}
 	}
@@ -69,22 +57,27 @@ func fillAStateBoard(board []Ship, caseTouched []ShipPosition) [BOARD_SIZE][]int
 
 	for _, ship := range board {
 		// If ship sinked
-		if len(ship.Positions) == len(ship.TouchedAt) {
-			for _, shipPosition := range ship.Positions {
+		if shipSank(ship) {
+			for _, shipPosition := range ship.positions {
 				generatedBoard[shipPosition.x][shipPosition.y] = SHIP_SINKED
 			}
-			continue
-		} else if len(ship.TouchedAt) > 0 {
-			// If ship touched
-			for _, shipTouchedAt := range ship.TouchedAt {
+		} else if shipWasTouched(ship) {
+			for _, shipTouchedAt := range ship.touchedAt {
 				generatedBoard[shipTouchedAt.x][shipTouchedAt.y] = SHIP_TOUCHED
 			}
-			continue
 		}
 
 	}
 
 	return generatedBoard
+}
+
+func shipSank(ship Ship) bool {
+	return len(ship.positions) == len(ship.touchedAt)
+}
+
+func shipWasTouched(ship Ship) bool {
+	return len(ship.touchedAt) > 0
 }
 
 func showABoard(board [BOARD_SIZE][]int8) {
@@ -105,4 +98,4 @@ func DisplayOpponentBoard() {}
 func DisplayOwnBoardState() {}
 
 
- */
+*/
