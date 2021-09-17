@@ -15,7 +15,7 @@ func getBoard() {
 
 }
 
-// Return how many boat are left
+// Return how many boat are remaining
 func getBoats(w http.ResponseWriter, req *http.Request) {
 
 	switch req.Method {
