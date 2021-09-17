@@ -1,7 +1,7 @@
 package main
 
 var idPlayer = RandomString(4)
-var idsOpponent []string
+var idsOpponent []uint16
 var caseTouched []ShipPosition
 var ships []Ship
 
