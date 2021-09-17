@@ -10,7 +10,7 @@ func StartServer() {
 	http.HandleFunc("/board", getBoard)
 	http.HandleFunc("/boats", getBoats)
 	http.HandleFunc("/hit", postHit)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":"+ ownPort, nil)
 }
 
 // Return the board's state (case hit, ship touched, ship sinked)
@@ -20,7 +20,7 @@ func getBoard(w http.ResponseWriter, req *http.Request) {
 		boards := fillAStateBoard(ships, caseTouched)
 		fmt.Printf("State of the board : \n")
 		fmt.Fprintf(w, "State of the board : \n")
-		for _, board := range boards {
+		for _, board := range boards{
 			fmt.Printf("%d \n", board)
 			fmt.Fprintf(w, "%d \n", board)
 		}

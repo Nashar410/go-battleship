@@ -40,7 +40,7 @@ var PERSONNAL_ACTION_MENU = Choice{
 var ACCESS_OPPONENT_ACTION_MENU = Choice{
 	"Accéder au menu de combat\n",
 	[]string{
-		COMMAND_ACTION_OPPONENT_BUTTON + " pour attaquer un adversaire\n"}}
+		COMMAND_ACTION_OPPONENT_BUTTON + " pour accéder au menu d'attaque sur l'adversaire\n"}}
 
 var OWN_BOAT_POSITION = Choice{
 	"Etats des navires\n",
@@ -81,6 +81,7 @@ var BOAT_STATE = Choice{
 	"Appuyez sur entrée pour continuer\n",
 	[]string{}}
 
+
 var UNEXPECTED_ACTION = Choice{
 	"Action non prévue\n",
 	[]string{}}
@@ -88,6 +89,7 @@ var UNEXPECTED_ACTION = Choice{
 var WHICH_OPPONENT = Choice{
 	"Choisissez votre cible:\n ",
 	[]string{}}
+
 
 var OPPONENT_ACTION_MENU = Choice{
 	"Voici les actions possibles:\n ",
@@ -98,6 +100,7 @@ var OPPONENT_ACTION_MENU = Choice{
 var WHICH_OPPONENT_CASE = Choice{
 	"Quel case voulez-vous attaquer ? Format attendu: 1:1\n",
 	[]string{}}
+
 
 var ATTACK_LAUNCHED = Choice{
 	"Vous avez lancé une attaque sur %s\n",
@@ -126,6 +129,7 @@ var ATTACKED_SINKED = Choice{
 var YOU_LOOSE = Choice{
 	"Tout vos navires ont été coulés, vous avez perdu.\n",
 	[]string{}}
+
 
 var OPPONENT_LOST = Choice{
 	"%s n'a plus aucun navire, il a perdu.\n",
@@ -234,8 +238,43 @@ func OpponentActionMenu() {
 	switch choicePlayer {
 	case COMMAND_ATTACK:
 		fmt.Println(portOpponent)
+		target := askPlayer(WHICH_OPPONENT_CASE.getText())
+		x := strings.Split(target, ":")[0]
+		y := strings.Split(target, ":")[1]
+		//postBody, _ := json.Marshal(map[string]string{
+		//	"x":  x,
+		//	"y": y,
+		//})
+		//responseBody := bytes.NewBuffer(postBody)
+		//fmt.Printf("%s", responseBody)
+		//Leverage Go's HTTP Post function to make request
+		resp, err := http.Post("http://localhost:" + portOpponent + "/hit?x="+ x + "y="+ y, "application/x-www-form-urlencoded", nil)
+		//Handle Error
+		if err != nil {
+			log.Fatalf("An Error Occured %v", err)
+		}
+		defer resp.Body.Close()
+		//Read the response body
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		sb := string(body)
+		log.Printf(sb)
 	case COMMAND_SEE_OPPONENT_BOARD:
 		fmt.Println(portOpponent)
+		resp, err := http.Get("http://localhost:" + portOpponent + "/board")
+		if err != nil {
+			log.Fatalln(err)
+		}
+		//We Read the response body on the line below.
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		//Convert the body to type string
+		sb := string(body)
+		fmt.Printf(sb)
 	default:
 		fmt.Println(UNEXPECTED_ACTION.getText())
 	}
@@ -270,6 +309,8 @@ func askPlayer(question string) string {
 		return strings.TrimSuffix(input, "\n")
 	}
 }
+
+
 
 /*
 Scénario :
