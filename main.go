@@ -5,17 +5,17 @@ import (
 )
 
 var idPlayer = RandomString(4)
-var idsOpponent []string
+var portsOpponent []string
 var caseTouched []ShipPosition
 var ships []Ship
 var ownPort string = "8080"
 
 func main() {
 	ownPort = os.Args[1]
-	StartServer()
+	go StartServer()
 	ships := generateShips()
 	GenerateAndShowABoard(ships)
-	WelcomePlayer(idPlayer)
+	WelcomePlayer()
 	ActionMenu()
 }
 

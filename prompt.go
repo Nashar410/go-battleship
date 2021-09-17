@@ -15,11 +15,11 @@ var GIVE_PLAYER_ID = Choice{
 		"Votre ID est %s\n",
 	[]string{}}
 
-var ENTER_ID_OPPONENT = Choice{
+var ENTER_PORT_OPPONENT = Choice{
 	"Entrez l'ID d'un adversaire:\n ",
 	[]string{}}
 
-var ENTER_MORE_ID_OPPONENT = Choice{
+var ENTER_MORE_PORT_OPPONENT = Choice{
 	"Voulez-vous ajouter un autre adversaire ?\n",
 	[]string{
 		COMMAND_YES + " pour oui\n",
@@ -142,21 +142,20 @@ type Choice struct {
 	Choices []string
 }
 
-func WelcomePlayer(idPlayer string) {
+func WelcomePlayer() {
 	// Welcome the player
 	fmt.Println(WELCOME_PLAYER.getText())
-	fmt.Printf(GIVE_PLAYER_ID.getText(), idPlayer)
 	// Ask for an opponent id
-	reAskIdOpponent := true
+	reAskportOpponent := true
 	firstAsk := true
-	for reAskIdOpponent  {
+	for reAskportOpponent  {
 		if firstAsk {
-			idsOpponent = append(idsOpponent, askPlayer(ENTER_ID_OPPONENT.getText()))
+			portsOpponent = append(portsOpponent, askPlayer(ENTER_PORT_OPPONENT.getText()))
 			firstAsk = false
 		} else {
-			reAskIdOpponent = askPlayer(ENTER_MORE_ID_OPPONENT.getTextWithChoices()) == COMMAND_YES
-			if reAskIdOpponent {
-				idsOpponent = append(idsOpponent, askPlayer(ENTER_ID_OPPONENT.getText()))
+			reAskportOpponent = askPlayer(ENTER_MORE_PORT_OPPONENT.getTextWithChoices()) == COMMAND_YES
+			if reAskportOpponent {
+				portsOpponent = append(portsOpponent, askPlayer(ENTER_PORT_OPPONENT.getText()))
 			}
 		}
 
@@ -189,14 +188,14 @@ func ActionMenu() {
 
 func OpponentActionMenu(){
 	fmt.Println(COMBAT_MENU.getText())
-	idOpponent := askPlayer(WHICH_OPPONENT.getTextWithChoices())
+	portOpponent := askPlayer(WHICH_OPPONENT.getTextWithChoices())
 	fmt.Println(OPPONENT_ACTION_MENU.getTextWithChoices())
 	choicePlayer := askPlayer(ENTER_CHOICE.getText())
 	switch choicePlayer {
 	case COMMAND_ATTACK:
-		fmt.Println(idOpponent)
+		fmt.Println(portOpponent)
 	case COMMAND_SEE_OPPONENT_BOARD:
-		fmt.Println(idOpponent)
+		fmt.Println(portOpponent)
 	default:
 		fmt.Println(UNEXPECTED_ACTION.getText())
 	}
