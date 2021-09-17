@@ -8,6 +8,7 @@ var caseTouched []ShipPosition
 var ships []Ship
 
 func main() {
+	go StartServer()
 	ships := generateShips()
 	GenerateAndShowABoard(ships)
 	fmt.Println()
