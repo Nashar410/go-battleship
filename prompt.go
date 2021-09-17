@@ -151,16 +151,12 @@ func WelcomePlayer(idPlayer string) {
 	firstAsk := true
 	for reAskIdOpponent  {
 		if firstAsk {
-			idOp := 0
-			fmt.Sscanf(askPlayer(ENTER_ID_OPPONENT.getText()), "%d", idOp)
-			idsOpponent = append(idsOpponent, uint16(idOp))
+			idsOpponent = append(idsOpponent, askPlayer(ENTER_ID_OPPONENT.getText()))
 			firstAsk = false
 		} else {
 			reAskIdOpponent = askPlayer(ENTER_MORE_ID_OPPONENT.getTextWithChoices()) == COMMAND_YES
 			if reAskIdOpponent {
-				idOp := 0
-				fmt.Sscanf(askPlayer(ENTER_ID_OPPONENT.getText()), "%d", idOp)
-				idsOpponent = append(idsOpponent, uint16(idOp))
+				idsOpponent = append(idsOpponent, askPlayer(ENTER_ID_OPPONENT.getText()))
 			}
 		}
 

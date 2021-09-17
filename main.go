@@ -1,17 +1,22 @@
 package main
 
+import (
+	"os"
+)
+
 var idPlayer = RandomString(4)
-var idsOpponent []uint16
+var idsOpponent []string
 var caseTouched []ShipPosition
 var ships []Ship
+var ownPort string = "8080"
 
 func main() {
+	ownPort = os.Args[1]
 	StartServer()
 	ships := generateShips()
 	GenerateAndShowABoard(ships)
 	WelcomePlayer(idPlayer)
 	ActionMenu()
-
 }
 
 func generateShips() []Ship {
