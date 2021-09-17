@@ -7,7 +7,10 @@ import (
 
 // StartServer Start the server in go routines
 func StartServer() {
-
+	http.HandleFunc("/board", getBoard)
+	http.HandleFunc("/boats", getBoats)
+	http.HandleFunc("/hit", postHit)
+	http.ListenAndServe(":8080", nil)
 }
 
 // Return the board's state (case hit, ship touched, ship sinked)
