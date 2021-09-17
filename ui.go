@@ -61,7 +61,7 @@ func fillAStateBoard(board []Ship, caseTouched []ShipPosition) [BOARD_SIZE][]int
 			for _, shipPosition := range ship.positions {
 				generatedBoard[shipPosition.x][shipPosition.y] = SHIP_SINKED
 			}
-		} else if shipWasTouched(ship) {
+		} else if shipWasHit(ship) {
 			for _, shipTouchedAt := range ship.touchedAt {
 				generatedBoard[shipTouchedAt.x][shipTouchedAt.y] = SHIP_TOUCHED
 			}
@@ -76,7 +76,7 @@ func shipSank(ship Ship) bool {
 	return len(ship.positions) == len(ship.touchedAt)
 }
 
-func shipWasTouched(ship Ship) bool {
+func shipWasHit(ship Ship) bool {
 	return len(ship.touchedAt) > 0
 }
 
