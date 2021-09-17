@@ -48,10 +48,21 @@ func generateShip(ships []Ship, shipSize int8) (newShip Ship) {
 		// At the beginning, set the position slice empty
 		positions = nil
 
+		// Set a random orientation for the other parts of the ship
+		rand.Seed(time.Now().Unix())
+		orientation := int(rand.Intn(10)) // 5/10 chance => "1/2 chance"
+
 		// Generate first position with x and y locations
 		rand.Seed(time.Now().Unix())
-		x := int8(rand.Intn(9 - int(shipSize)))
-		y := int8(rand.Intn(9))
+		var x int8
+		var y int8
+		if orientation%2 == HORIZONTAL {
+			x = int8(rand.Intn(9 - int(shipSize)))
+			y = int8(rand.Intn(9))
+		} else {
+			x = int8(rand.Intn(9))
+			y = int8(rand.Intn(9 - int(shipSize)))
+		}
 
 		// Regenerate the entire ship if has collision with other ships
 		if !hasCollission(ships, position) {
@@ -59,10 +70,6 @@ func generateShip(ships []Ship, shipSize int8) (newShip Ship) {
 			position.x = x
 			position.y = y
 			positions = append(positions, position)
-
-			// Set a random orientation for the other parts of the ship
-			rand.Seed(time.Now().Unix())
-			orientation := int(rand.Intn(10)) // 5/5 chance
 
 			// Generate n remaining parts of the ship from the second index
 			i := int8(1)

@@ -14,5 +14,6 @@ func generateShips() []Ship {
 	// Add Two boats
 	ships = append(ships, generateShip(ships, 2))
 	ships = append(ships, generateShip(ships, 3))
+	ships = append(ships, generateShip(ships, 4))
 	return ships
 }
