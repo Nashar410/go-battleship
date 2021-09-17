@@ -3,7 +3,9 @@ package main
 // This file contain all the meta to interract with or between ships
 
 import (
+	"fmt"
 	"math/rand"
+	"time"
 )
 
 // Position of a ship
@@ -34,59 +36,65 @@ func hasCollission(boats []Ship, position ShipPosition) bool {
 
 // Generate a ship with the following pattern :
 // Set the first position, then set a random orientation to generate remaining chained positions
-func generateShip(ships []Ship, shipSize int8) Ship {
-	var newShip Ship
+func generateShip(ships []Ship, shipSize int8) (newShip Ship) {
 	mustGenerate := true
 	positions := make([]ShipPosition, 0, 5)
 	var position ShipPosition
 	const HORIZONTAL = 0
 	const VERTICAL = 1
 
-restartGeneration:
-	// Is true when must generate/regenerate the entier ship
+	fmt.Println("Generate a new ship...")
 	for mustGenerate {
-
 		// At the beginning, set the position slice empty
 		positions = nil
 
 		// Generate first position with x and y locations
+		rand.Seed(time.Now().Unix())
 		x := int8(rand.Intn(9 - int(shipSize)))
 		y := int8(rand.Intn(9))
 
 		// Regenerate the entire ship if has collision with other ships
-		if hasCollission(ships, position) {
-			break restartGeneration
-		}
+		if !hasCollission(ships, position) {
+			// Append first position
+			position.x = x
+			position.y = y
+			positions = append(positions, position)
 
-		// Append first position
-		position.x = x
-		position.y = y
-		positions = append(positions, position)
+			// Set a random orientation for the other parts of the ship
+			rand.Seed(time.Now().Unix())
+			orientation := int(rand.Intn(10)) // 5/5 chance
 
-		// Set a random orientation for the other parts of the ship
-		orientation := int(rand.Intn(1))
+			// Generate n remaining parts of the ship from the second index
+			i := int8(1)
+			for i < shipSize {
+				if orientation%2 == HORIZONTAL {
+					position.x = x + int8(i)
+					position.y = y
+					positions = append(positions, position)
 
-		// Generate n remaining parts of the ship from the second index
-		for i := 1; i < int(shipSize); i++ {
-			if orientation == HORIZONTAL {
-				position.x = x + int8(i)
-				position.y = y
-				positions = append(positions, position)
+				} else if orientation%2 == VERTICAL {
+					position.x = x
+					position.y = y + int8(i)
+					positions = append(positions, position)
+				}
 
-			} else if orientation == VERTICAL {
-				position.x = x
-				position.y = y + int8(i)
-				positions = append(positions, position)
+				// Regenerate the entire ship if the position has a collision with existing position
+				if hasCollission(ships, position) {
+					break
+				}
+				i++
+			}
+			if i == shipSize {
+				mustGenerate = false
 			}
 
-			// Regenerate the entire ship if the position has a collision with existing position
-			if hasCollission(ships, position) {
-				break restartGeneration
-			}
 		}
+		// Collision !
+		time.Sleep(time.Second)
 	}
 
 	// The positions are successfully generated
+	fmt.Println("Ship successfully generated")
 	newShip.positions = positions
-	return newShip
+	return
 }

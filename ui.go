@@ -35,36 +35,29 @@ func displayToUser(str string) {
 	fmt.Println(str)
 }
 
-func generateEmptyBoard() [][]int8 {
-	var board [][]int8
+func generateEmptyBoard() [10][10]int8 {
+	var board [10][10]int8
 	for i := 0; i < 10; i++ {
-		for y := 0; y < 10; y++ {
-			board[i][y] = 0
-			// utiliser make !
+		for j := 0; j < 10; j++ {
+			board[i][j] = 0
 		}
 	}
 	return board
 }
 
-var Board []Ship = []Ship{
-	{
-		[]ShipPosition{{0, 0}},
-		[]ShipPosition{{}}},
-	{
-		[]ShipPosition{{0, 2}},
-		[]ShipPosition{{}}},
-	{
-		[]ShipPosition{{1, 1}},
-		[]ShipPosition{{}}}}
-
 func DisplayOwnBoard(board []Ship) {
+	fmt.Println("Generate a new board...")
 	emptyBoard := generateEmptyBoard()
 	for i := 0; i < len(board); i++ {
-		for y := 0; y < len(board[i].positions); y++ {
-			emptyBoard[board[i].positions[y].x][board[i].positions[y].y] = 1
+		for j := 0; j < len(board[i].positions); j++ {
+			emptyBoard[board[i].positions[j].x][board[i].positions[j].y] = 1
 		}
-		fmt.Println(emptyBoard[i])
 	}
+
+	for x := 0; x < 10; x++ {
+		fmt.Println(emptyBoard[x])
+	}
+	fmt.Println("Board successfully generated")
 }
 
 func displayOpponentBoard() {}
