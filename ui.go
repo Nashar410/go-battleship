@@ -12,6 +12,7 @@ const COMMAND_NO = "n"
 const COMMAND_YES = "y"
 const COMMAND_QUIT = "q"
 const COMMAND_ATTACK = "a"
+const COMMAND_ACTION_OPPONENT_BUTTON = "w"
 const COMMAND_SEE_OWN_BOARD = "z"
 const COMMAND_SEE_OPPONENT_BOARD = "o"
 const COMMAND_SEE_OWN_BOARD_STATE = "s"
@@ -27,6 +28,14 @@ func generateEmptyBoard() [BOARD_SIZE][]int8 {
 		board[i] = make([]int8, BOARD_SIZE)
 	}
 	return board
+}
+
+func showOwnBoard() {
+	GenerateAndShowABoard(ships)
+}
+
+func showOwnBoardState() {
+	showABoard(fillAStateBoard(ships, caseTouched))
 }
 
 func GenerateAndShowABoard(board []Ship) {

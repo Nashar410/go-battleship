@@ -17,6 +17,10 @@ var GIVE_PLAYER_ID = Choice{
 
 var ENTER_ID_OPPONENT = Choice{
 	"Entrez l'ID d'un adversaire: ",
+	[]string{}}
+
+var ENTER_MORE_ID_OPPONENT = Choice{
+	"Voulez-vous ajouter un autre adversaire ?",
 	[]string{
 		COMMAND_YES + " pour oui\n",
 		COMMAND_NO + " pour non\n"}}
@@ -28,11 +32,24 @@ var RULES = Choice{
 var PERSONNAL_ACTION_MENU = Choice{
 	"Voici les actions possibles: ",
 	[]string{
-		COMMAND_SEE_OWN_BOARD + " pour voir la position de vos bateaux\n",
-		COMMAND_SEE_OWN_BOARD_STATE + " pour voir l'état de votre plateau\n"}}
+		COMMAND_SEE_OWN_BOARD + " pour voir la position de vos navires\n",
+		COMMAND_SEE_OWN_BOARD_STATE + " pour voir l'état de vos navires\n"}}
 
 var ACCESS_OPPONENT_ACTION_MENU = Choice{
 	"Accéder au menu de combat\n",
+	[]string{
+		COMMAND_ACTION_OPPONENT_BUTTON + " pour attaquer un adversaire\n"}}
+
+var COMBAT_MENU = Choice{
+	"Menu de combat\n",
+	[]string{}}
+
+var ENTER_CHOICE = Choice{
+	"Entrez un choix:\n",
+	[]string{}}
+
+var UNEXPECTED_ACTION = Choice{
+	"Action non prévue\n",
 	[]string{}}
 
 var WHICH_OPPONENT = Choice{
@@ -93,6 +110,69 @@ type Choice struct {
 	Choices []string
 }
 
+func WelcomePlayer(text Choice, idPlayer int8) {
+	// Welcome the player
+	fmt.Println(WELCOME_PLAYER.Text)
+	fmt.Printf(GIVE_PLAYER_ID.Text, idPlayer)
+	// Ask for an opponent id
+	reAskIdOpponent := true
+	firstAsk := true
+	for reAskIdOpponent  {
+		if firstAsk {
+			idsOpponent = append(idsOpponent, askPlayer(ENTER_ID_OPPONENT.Text))
+			firstAsk = false
+		} else {
+			reAskIdOpponent = askPlayer(ENTER_MORE_ID_OPPONENT.getTextWithChoices()) == COMMAND_YES
+			if reAskIdOpponent {
+				idsOpponent = append(idsOpponent, askPlayer(ENTER_ID_OPPONENT.Text))
+			}
+		}
+
+	}
+	fmt.Println(RULES)
+}
+
+func ActionMenu() {
+	fmt.Println(PERSONNAL_ACTION_MENU.getTextWithChoices())
+	fmt.Println(ACCESS_OPPONENT_ACTION_MENU.getTextWithChoices())
+	playerChoice := askPlayer(ENTER_CHOICE.Text)
+	switch playerChoice {
+	case COMMAND_SEE_OWN_BOARD:
+		showOwnBoard()
+	case COMMAND_SEE_OWN_BOARD_STATE:
+		showOwnBoardState()
+	case COMMAND_ACTION_OPPONENT_BUTTON:
+		OpponentActionMenu()
+	default:
+		fmt.Println(UNEXPECTED_ACTION.Text)
+	}
+	ActionMenu()
+}
+
+func OpponentActionMenu(){
+	fmt.Println(COMBAT_MENU.Text)
+	idOpponent := askPlayer(WHICH_OPPONENT.getTextWithChoices())
+	fmt.Println(OPPONENT_ACTION_MENU.getTextWithChoices())
+	choicePlayer := askPlayer(ENTER_CHOICE.Text)
+	switch choicePlayer {
+	case COMMAND_ATTACK:
+		// attack opponent
+	case COMMAND_SEE_OPPONENT_BOARD:
+		// see opponent board
+	default:
+		fmt.Println(UNEXPECTED_ACTION.Text)
+	}
+	ActionMenu()
+}
+
+// rajoute un joueur
+func (choiceObj Choice) getTextWithChoices() string{
+	choices := ""
+	for _, choice := range choiceObj.Choices {
+		choices += choice
+	}
+	return choiceObj.Text + choices
+}
 
 func askPlayer(question string) string {
 	fmt.Println(question)
