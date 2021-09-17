@@ -16,6 +16,8 @@ func getBoats() {
 }
 
 // Hit an opponent's ship's position
-func postHit(idOpponent string, position ShipPosition){
-
+func postHit(idOpponent string, position ShipPosition) {
+	if hasCollission(ships, position) {
+		ships = hitShip(ships, position)
+	}
 }

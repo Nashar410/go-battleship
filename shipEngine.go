@@ -34,6 +34,18 @@ func hasCollission(boats []Ship, position ShipPosition) bool {
 	return false
 }
 
+func hitShip(ships []Ship, position ShipPosition) []Ship {
+	for _, ship := range ships {
+		for _, curPosition := range ship.positions {
+			if curPosition == position {
+				ship.touchedAt = append(ship.touchedAt, position)
+				return ships
+			}
+		}
+	}
+	return ships
+}
+
 // Generate a ship with the following pattern :
 // Set the first position, then set a random orientation to generate remaining chained positions
 func generateShip(ships []Ship, shipSize int8) (newShip Ship) {
