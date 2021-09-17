@@ -118,3 +118,11 @@ func generateShip(ships []Ship, shipSize int8) (newShip Ship) {
 	newShip.positions = positions
 	return
 }
+
+func shipSank(ship Ship) bool {
+	return len(ship.positions) == len(ship.touchedAt)
+}
+
+func shipWasHit(ship Ship) bool {
+	return len(ship.touchedAt) > 0
+}

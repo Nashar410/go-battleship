@@ -81,14 +81,6 @@ func fillAStateBoard(board []Ship, caseTouched []ShipPosition) [BOARD_SIZE][]int
 	return generatedBoard
 }
 
-func shipSank(ship Ship) bool {
-	return len(ship.positions) == len(ship.touchedAt)
-}
-
-func shipWasHit(ship Ship) bool {
-	return len(ship.touchedAt) > 0
-}
-
 func showABoard(board [BOARD_SIZE][]int8) {
 	for _, line := range board {
 		fmt.Println(line)
