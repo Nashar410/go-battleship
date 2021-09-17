@@ -3,6 +3,8 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"os"
 	"strings"
 )
@@ -121,7 +123,7 @@ var ATTACKED_SINKED = Choice{
 	"Vous n'avez touché aucun des navires de %s, un de vos navires a coulé\n",
 	[]string{}}
 
-var YOU_LOST = Choice{
+var YOU_LOOSE = Choice{
 	"Tout vos navires ont été coulés, vous avez perdu.\n",
 	[]string{}}
 
@@ -180,13 +182,48 @@ func ActionMenu() {
 			fmt.Println(UNEXPECTED_ACTION.getText())
 		}
 
+		// You loose te game
 		if areAllSink(ships) {
 			gameContinue = false
-			fmt.Println(YOU_LOST.getText())
+			fmt.Println(YOU_LOOSE.getText())
+		}
+		// You win the game
+		if getEnnemiesRemaining() == 0 {
+			gameContinue = false
+			fmt.Println(YOU_WIN.getText())
 		}
 
 		askPlayer(PRESS_TO_CONTINUE.getText())
 	}
+}
+
+func getEnnemiesRemaining() (remainingOpponents int) {
+	remainingOpponents = len(portsOpponent)
+	for _, curOpponentPort := range portsOpponent {
+		// Do while
+		var err error
+		var resp *http.Response
+		for {
+			if resp, err = http.Get("/boats:" + curOpponentPort); err == nil {
+				break
+			}
+		}
+		defer resp.Body.Close()
+
+		var body []byte
+		for {
+			if body, err = ioutil.ReadAll(resp.Body); err == nil {
+				break
+			}
+		}
+		var remainingOpponents int
+		fmt.Sscanf(string(body), "%d", remainingOpponents)
+		if remainingOpponents == 0 {
+			remainingOpponents--
+		}
+
+	}
+	return
 }
 
 func OpponentActionMenu() {
