@@ -6,11 +6,12 @@ var caseTouched []ShipPosition
 var ships []Ship
 
 func main() {
-	go StartServer()
+	StartServer()
 	ships := generateShips()
 	GenerateAndShowABoard(ships)
 	WelcomePlayer(idPlayer)
 	ActionMenu()
+
 }
 
 func generateShips() []Ship {

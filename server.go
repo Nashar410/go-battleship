@@ -11,8 +11,18 @@ func StartServer() {
 }
 
 // Return the board's state (case hit, ship touched, ship sinked)
-func getBoard() {
+func getBoard(w http.ResponseWriter, req *http.Request) {
+	switch req.Method {
+	case http.MethodGet:
+		boards := fillAStateBoard(ships, caseTouched)
+		fmt.Printf("State of the board : \n")
+		fmt.Fprintf(w, "State of the board : \n")
+		for _, board := range boards{
+			fmt.Printf("%d \n", board)
+			fmt.Fprintf(w, "%d \n", board)
+		}
 
+	}
 }
 
 // Return how many boat are remaining
