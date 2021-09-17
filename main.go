@@ -13,7 +13,7 @@ func main() {
 }
 
 func generateShips() []Ship {
-	ships := make([]Ship, 0, 2)
+	ships := make([]Ship, 0, 3)
 
 	// Add Two boats
 	ships = append(ships, generateShip(ships, 2))

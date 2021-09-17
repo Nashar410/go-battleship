@@ -38,7 +38,7 @@ func hasCollission(boats []Ship, position ShipPosition) bool {
 // Set the first position, then set a random orientation to generate remaining chained positions
 func generateShip(ships []Ship, shipSize int8) (newShip Ship) {
 	mustGenerate := true
-	positions := make([]ShipPosition, 0, 5)
+	positions := make([]ShipPosition, 0, shipSize)
 	var position ShipPosition
 	const HORIZONTAL = 0
 	const VERTICAL = 1
