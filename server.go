@@ -27,6 +27,8 @@ func getBoats(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 		fmt.Fprintln(w, remainingShip)
+	default:
+		Send404NotFound(w)
 	}
 }
 
@@ -39,10 +41,8 @@ func postHit(idOpponent string, position ShipPosition) {
 
 func Send404NotFound(w http.ResponseWriter) {
 	fmt.Fprintln(w, "Page not found")
-	fmt.Println("Page not found")
 }
 
 func Send500InternalServerError(w http.ResponseWriter) {
 	fmt.Fprintln(w, "Something went wrong")
-	fmt.Println("Something went wrong")
 }
