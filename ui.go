@@ -70,7 +70,7 @@ func fillAStateBoard(board []Ship, caseTouched []ShipPosition) [BOARD_SIZE][]int
 			for _, shipPosition := range ship.positions {
 				generatedBoard[shipPosition.x][shipPosition.y] = SHIP_SINKED
 			}
-		} else if shipWasHit(ship) {
+		} else if shipHadHit(ship) {
 			for _, shipTouchedAt := range ship.touchedAt {
 				generatedBoard[shipTouchedAt.x][shipTouchedAt.y] = SHIP_TOUCHED
 			}

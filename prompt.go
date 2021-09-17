@@ -8,11 +8,11 @@ import (
 )
 
 var WELCOME_PLAYER = Choice{
-		"Bienvenue au jeu de bataille navale !\n",
-		[]string{}}
+	"Bienvenue au jeu de bataille navale !\n",
+	[]string{}}
 
 var GIVE_PLAYER_ID = Choice{
-		"Votre ID est %s\n",
+	"Votre ID est %s\n",
 	[]string{}}
 
 var ENTER_PORT_OPPONENT = Choice{
@@ -79,7 +79,6 @@ var BOAT_STATE = Choice{
 	"Appuyez sur entrée pour continuer\n",
 	[]string{}}
 
-
 var UNEXPECTED_ACTION = Choice{
 	"Action non prévue\n",
 	[]string{}}
@@ -87,7 +86,6 @@ var UNEXPECTED_ACTION = Choice{
 var WHICH_OPPONENT = Choice{
 	"Choisissez votre cible:\n ",
 	[]string{}}
-
 
 var OPPONENT_ACTION_MENU = Choice{
 	"Voici les actions possibles:\n ",
@@ -98,7 +96,6 @@ var OPPONENT_ACTION_MENU = Choice{
 var WHICH_OPPONENT_CASE = Choice{
 	"Quel case voulez-vous attaquer ? Format attendu: 1:1\n",
 	[]string{}}
-
 
 var ATTACK_LAUNCHED = Choice{
 	"Vous avez lancé une attaque sur %s\n",
@@ -112,15 +109,15 @@ var ATTACK_FAILED = Choice{
 	"Vous n'avez touché aucun des navires de %s\n",
 	[]string{}}
 
-var ATTACKED_SUCCESSED= Choice{
+var ATTACKED_SUCCESSED = Choice{
 	"Un de vos navires a été touché par un tir de %s\n",
 	[]string{}}
 
-var ATTACKED_FAILED= Choice{
+var ATTACKED_FAILED = Choice{
 	"Vous avez essuyé un tir de %s sans dégats %s\n",
 	[]string{}}
 
-var ATTACKED_SINKED= Choice{
+var ATTACKED_SINKED = Choice{
 	"Vous n'avez touché aucun des navires de %s, un de vos navires a coulé\n",
 	[]string{}}
 
@@ -128,17 +125,16 @@ var YOU_LOST = Choice{
 	"Tout vos navires ont été coulés, vous avez perdu.\n",
 	[]string{}}
 
-
 var OPPONENT_LOST = Choice{
 	"%s n'a plus aucun navire, il a perdu.\n",
 	[]string{}}
 
-var YOU_WIN  = Choice{
+var YOU_WIN = Choice{
 	"Vous êtes le dernier en lice ! Vous avez gagné !\n",
 	[]string{}}
 
 type Choice struct {
-	Text string
+	Text    string
 	Choices []string
 }
 
@@ -148,7 +144,7 @@ func WelcomePlayer() {
 	// Ask for an opponent id
 	reAskportOpponent := true
 	firstAsk := true
-	for reAskportOpponent  {
+	for reAskportOpponent {
 		if firstAsk {
 			portsOpponent = append(portsOpponent, askPlayer(ENTER_PORT_OPPONENT.getText()))
 			firstAsk = false
@@ -164,29 +160,36 @@ func WelcomePlayer() {
 }
 
 func ActionMenu() {
-	fmt.Println(PERSONNAL_ACTION_MENU.getTextWithChoices())
-	fmt.Println(ACCESS_OPPONENT_ACTION_MENU.getTextWithChoices())
-	playerChoice := askPlayer(ENTER_CHOICE.getText())
-	switch playerChoice {
-	case COMMAND_SEE_OWN_BOARD:
-		fmt.Println(OWN_BOAT_POSITION.getText())
-		showOwnBoard()
-		fmt.Println(LEGEND_POSITION_BOARD.getTextWithChoices())
-	case COMMAND_SEE_OWN_BOARD_STATE:
-		fmt.Println(OWN_BOAT_STATE.getText())
-		showOwnBoardState()
-		fmt.Println(LEGEND_STATE_BOARD.getTextWithChoices())
+	for gameContinue {
+		fmt.Println(PERSONNAL_ACTION_MENU.getTextWithChoices())
+		fmt.Println(ACCESS_OPPONENT_ACTION_MENU.getTextWithChoices())
+		playerChoice := askPlayer(ENTER_CHOICE.getText())
+		switch playerChoice {
+		case COMMAND_SEE_OWN_BOARD:
+			fmt.Println(OWN_BOAT_POSITION.getText())
+			showOwnBoard()
+			fmt.Println(LEGEND_POSITION_BOARD.getTextWithChoices())
+		case COMMAND_SEE_OWN_BOARD_STATE:
+			fmt.Println(OWN_BOAT_STATE.getText())
+			showOwnBoardState()
+			fmt.Println(LEGEND_STATE_BOARD.getTextWithChoices())
 
-	case COMMAND_ACTION_OPPONENT_BUTTON:
-		OpponentActionMenu()
-	default:
-		fmt.Println(UNEXPECTED_ACTION.getText())
+		case COMMAND_ACTION_OPPONENT_BUTTON:
+			OpponentActionMenu()
+		default:
+			fmt.Println(UNEXPECTED_ACTION.getText())
+		}
+
+		if areAllSink(ships) {
+			gameContinue = false
+			fmt.Println(YOU_LOST.getText())
+		}
+
+		askPlayer(PRESS_TO_CONTINUE.getText())
 	}
-	askPlayer(PRESS_TO_CONTINUE.getText())
-	ActionMenu()
 }
 
-func OpponentActionMenu(){
+func OpponentActionMenu() {
 	fmt.Println(COMBAT_MENU.getText())
 	portOpponent := askPlayer(WHICH_OPPONENT.getTextWithChoices())
 	fmt.Println(OPPONENT_ACTION_MENU.getTextWithChoices())
@@ -203,7 +206,7 @@ func OpponentActionMenu(){
 }
 
 // rajoute un joueur
-func (choiceObj Choice) getTextWithChoices() string{
+func (choiceObj Choice) getTextWithChoices() string {
 	choices := ""
 	for _, choice := range choiceObj.Choices {
 		choices += "\t  ▶ " + choice
@@ -212,8 +215,8 @@ func (choiceObj Choice) getTextWithChoices() string{
 }
 
 // rajoute un joueur
-func (choiceObj Choice) getText() string{
-	return "⚡\t"+ choiceObj.Text
+func (choiceObj Choice) getText() string {
+	return "⚡\t" + choiceObj.Text
 }
 
 func askPlayer(question string) string {
@@ -230,8 +233,6 @@ func askPlayer(question string) string {
 		return strings.TrimSuffix(input, "\n")
 	}
 }
-
-
 
 /*
 Scénario :

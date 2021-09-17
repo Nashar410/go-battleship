@@ -123,6 +123,20 @@ func shipSank(ship Ship) bool {
 	return len(ship.positions) == len(ship.touchedAt)
 }
 
-func shipWasHit(ship Ship) bool {
+func shipHadHit(ship Ship) bool {
 	return len(ship.touchedAt) > 0
+}
+
+func areAllSink(ships []Ship) bool {
+	return getSurvivingShips(ships) == 0
+}
+
+func getSurvivingShips(ship []Ship) (remainingShip int) {
+	remainingShip = len(ships)
+	for _, ship := range ships {
+		if shipSank(ship) {
+			remainingShip--
+		}
+	}
+	return
 }

@@ -20,7 +20,7 @@ func getBoard(w http.ResponseWriter, req *http.Request) {
 		boards := fillAStateBoard(ships, caseTouched)
 		fmt.Printf("State of the board : \n")
 		fmt.Fprintf(w, "State of the board : \n")
-		for _, board := range boards{
+		for _, board := range boards {
 			fmt.Printf("%d \n", board)
 			fmt.Fprintf(w, "%d \n", board)
 		}
@@ -33,13 +33,7 @@ func getBoats(w http.ResponseWriter, req *http.Request) {
 
 	switch req.Method {
 	case http.MethodGet:
-		remainingShip := len(ships)
-		for _, ship := range ships {
-			if shipSank(ship) {
-				remainingShip--
-			}
-		}
-		fmt.Fprintln(w, remainingShip)
+		fmt.Fprintln(w, getSurvivingShips(ships))
 	default:
 		Send404NotFound(w)
 	}

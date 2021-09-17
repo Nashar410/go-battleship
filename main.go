@@ -9,11 +9,12 @@ var portsOpponent []string
 var caseTouched []ShipPosition
 var ships []Ship
 var ownPort string = "8080"
+var gameContinue = true
 
 func main() {
 	ownPort = os.Args[1]
 	go StartServer()
-	ships := generateShips()
+	ships = generateShips()
 	GenerateAndShowABoard(ships)
 	WelcomePlayer()
 	ActionMenu()
