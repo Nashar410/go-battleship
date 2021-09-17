@@ -1,35 +1,25 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
-	"strings"
 )
 
 //////////////////////////////////////////////////
 ////////// 			GENERIC 			//////////
 //////////////////////////////////////////////////
 const BOARD_SIZE = 5
-const COMMAND_NO string = "n"
-const COMMAND_YES string = "y"
-const COMMAND_QUIT string = "q"
-const COMMAND_ATTACK string = "a"
-const COMMAND_SEE_OWN_BOARD string = "z"
-const COMMAND_SEE_OPPONENT_BOARD string = "o"
-const COMMAND_SEE_OWN_BOARD_STATE string = "s"
+const COMMAND_NO = "n"
+const COMMAND_YES = "y"
+const COMMAND_QUIT = "q"
+const COMMAND_ATTACK = "a"
+const COMMAND_SEE_OWN_BOARD = "z"
+const COMMAND_SEE_OPPONENT_BOARD = "o"
+const COMMAND_SEE_OWN_BOARD_STATE = "s"
+const CASE_TOUCHED = 9
+const SHIP_TOUCHED = 1
+const SHIP_SINKED = 2
+const CASE_EMPTY = 0
 
-func askPlayer(question string) string {
-	fmt.Println(question)
-	reader := bufio.NewReader(os.Stdin)
-	input, err := reader.ReadString('\n')
-	if err != nil {
-		fmt.Println("Erreur, réessayez !", err)
-		return ""
-	}
-	input = strings.TrimSuffix(input, "\n")
-	return input
-}
 
 // Create an array of int8 array that will be fill
 func generateEmptyBoard() [BOARD_SIZE][]int8 {
@@ -64,6 +54,39 @@ func fillABoard(board []Ship) [BOARD_SIZE][]int8 {
 	}
 	return generatedBoard
 }
+
+// Generate a board where the state of the ships and case are rendered
+func fillAStateBoard(board []Ship, caseTouched []ShipPosition) [BOARD_SIZE][]int8 {
+	generatedBoard := generateEmptyBoard()
+
+	// If a case without ship already touched
+	if len(caseTouched) > 0 {
+		for _, oneCase := range caseTouched {
+			generatedBoard[oneCase.x][oneCase.y] = CASE_TOUCHED
+
+		}
+	}
+
+	for _, ship := range board {
+		// If ship sinked
+		if len(ship.Positions) == len(ship.TouchedAt) {
+			for _, shipPosition := range ship.Positions {
+				generatedBoard[shipPosition.x][shipPosition.y] = SHIP_SINKED
+			}
+			continue
+		} else if len(ship.TouchedAt) > 0 {
+			// If ship touched
+			for _, shipTouchedAt := range ship.TouchedAt {
+				generatedBoard[shipTouchedAt.x][shipTouchedAt.y] = SHIP_TOUCHED
+			}
+			continue
+		}
+
+	}
+
+	return generatedBoard
+}
+
 func showABoard(board [BOARD_SIZE][]int8) {
 	for _, line := range board {
 		fmt.Println(line)

@@ -1,5 +1,12 @@
 package main
 
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
+)
+
 var WELCOME_PLAYER = Choice{
 		"Bienvenue au jeu de bataille navale !\n",
 		[]string{}}
@@ -86,6 +93,18 @@ type Choice struct {
 	Choices []string
 }
 
+
+func askPlayer(question string) string {
+	fmt.Println(question)
+	reader := bufio.NewReader(os.Stdin)
+	input, err := reader.ReadString('\n')
+	if err != nil {
+		fmt.Println("Erreur, réessayez !", err)
+		return ""
+	}
+	input = strings.TrimSuffix(input, "\n")
+	return input
+}
 
 
 
