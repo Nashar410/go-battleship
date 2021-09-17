@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 var idPlayer = RandomString(4)
 var idsOpponent []string
 var caseTouched []ShipPosition
@@ -11,7 +9,8 @@ func main() {
 	go StartServer()
 	ships := generateShips()
 	GenerateAndShowABoard(ships)
-	fmt.Println()
+	WelcomePlayer(idPlayer)
+	ActionMenu()
 }
 
 func generateShips() []Ship {
